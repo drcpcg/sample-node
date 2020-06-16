@@ -5,7 +5,6 @@ phases:
         nodejs: 10
   build:
     commands:
-      - cd lambda
       - npm install time
       - export BUCKET=codepipeline-us-west-2-196212339154
       - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
