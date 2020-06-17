@@ -18,3 +18,40 @@ Resources:
               detail: 
                 source: 
                   - aws.ecs
+      Role:  
+        Fn::GetAtt: 
+          - EcsScannerRole
+          - Arn
+  EcsScannerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Role to events rule
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonECS_FullAccess
+        - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+      Policies:
+        - PolicyName: EcsScannerPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendRawEmail
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - organizations:ListTagsForResource
+                Resource: "*"
+              - Sid: AssumeOrgRole
+                Effect: Allow
+                Action: 'sts:AssumeRole'
+                Resource: 'arn:aws:iam::*:role/OrganizationAccountAccessRole'
