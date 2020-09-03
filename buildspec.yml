@@ -9,6 +9,7 @@ phases:
       - export BUCKET=pds-deployers-test
       - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
       #- aws s3 cp template.yml s3://codepipeline-us-east-1-lambda-659660391320/template.yml
+      # test commit 1
 artifacts:
   files:
     - template.yml
